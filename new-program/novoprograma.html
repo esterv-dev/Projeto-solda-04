@@ -153,10 +153,6 @@ canvas{
 
 <body>
 
-<!-- =====================================
-PAINEL
-===================================== -->
-
 <div class="painel">
 
     <h2>SOLDATECH</h2>
@@ -175,6 +171,8 @@ PAINEL
     <button onclick="moverBico()">
         MOVER BICO
     </button>
+    
+    <button id="btnPlayPause" onclick="alternarMovimento()">Pausar</button>
 
     <button onclick="girarMesa()">
         GIRAR MESA
@@ -218,10 +216,6 @@ color:#cbd5e1;
     </div>
 
 </div>
-
-<!-- =====================================
-THREE JS
-===================================== -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
@@ -418,6 +412,12 @@ new THREE.MeshPhysicalMaterial({
 
 });
 
+const materialArame = new THREE.MeshPhysicalMaterial({
+    color: 0xb45309, 
+    metalness: 1,
+    roughness: 0.3
+});
+
 /* =====================================
 BASE
 ===================================== */
@@ -527,56 +527,64 @@ trilho.position.set(
 scene.add(trilho);
 
 /* =====================================
-SUPORTE
-===================================== */
-
-
-
-/* =====================================
-BICO
+BICO HORIZONTAL
 ===================================== */
 
 const bico =
 new THREE.Mesh(
-
     new THREE.CylinderGeometry(
-        0.15,
-        0.35,
-        2,
+        0.15, 
+        0.35, 
+        2,    
         32
     ),
-
     new THREE.MeshPhysicalMaterial({
-
         color:0xff8800,
-
         emissive:0xff6600,
-
         emissiveIntensity:0.5,
-
         metalness:1,
-
         roughness:0.2
-
     })
-
 );
 
-bico.rotation.z =
-Math.PI / 2;
-
-bico.position.set(
-    2,
-    5,
-    0
-);
-
+bico.rotation.z = Math.PI / 2;
+bico.position.set(1.8, 5, 0);
 bico.castShadow = true;
-
 scene.add(bico);
 
 /* =====================================
-LUZ SOLDA
+ALIMENTADOR DE ARRAME
+===================================== */
+
+const motorAlimentador = new THREE.Mesh(
+    new THREE.BoxGeometry(0.6, 0.6, 0.6),
+    metalEscuro
+);
+motorAlimentador.position.set(-0.5, 0.5, -0.4); 
+bico.add(motorAlimentador); 
+
+const roloArame = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.4, 0.4, 0.2, 32),
+    materialArame
+);
+roloArame.rotation.x = Math.PI / 2;
+roloArame.position.set(0, 0, -0.2);
+motorAlimentador.add(roloArame); 
+
+/* =====================================
+ARAME SAINDO PELA PONTA HORIZONTAL
+===================================== */
+
+const fioArame = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.02, 0.02, 0.5, 8),
+    materialArame
+);
+fioArame.position.set(0, 1.25, 0); 
+bico.add(fioArame); 
+
+
+/* =====================================
+LUZ SOLDA HORIZONTAL
 ===================================== */
 
 const luzSolda =
@@ -586,10 +594,7 @@ new THREE.PointLight(
     10
 );
 
-luzSolda.position.copy(
-    bico.position
-);
-
+luzSolda.position.set(bico.position.x - 1.5, bico.position.y, bico.position.z);
 scene.add(luzSolda);
 
 /* =====================================
@@ -621,11 +626,8 @@ new THREE.Mesh(
 );
 
 mesa.position.y = 0.9;
-
 mesa.castShadow = true;
-
 mesa.receiveShadow = true;
-
 scene.add(mesa);
 
 /* =====================================
@@ -660,14 +662,9 @@ new THREE.Mesh(
 );
 
 peca.position.y = 1.2;
-
 peca.castShadow = true;
-
 mesa.add(peca);
 
-/* =====================================
-MOVIMENTO BICO
-===================================== */
 /* =====================================
 PONTOS
 ===================================== */
@@ -677,78 +674,53 @@ let pontos = [];
 function salvarPonto(){
 
     const ponto = {
-
-        x: Number(
-            bico.position.x.toFixed(2)
-        ),
-
-        y: Number(
-            bico.position.y.toFixed(2)
-        ),
-
-        z: Number(
-            bico.position.z.toFixed(2)
-        )
+        x: Number(bico.position.x.toFixed(2)),
+        y: Number(bico.position.y.toFixed(2)),
+        z: Number(bico.position.z.toFixed(2))
     };
 
     pontos.push(ponto);
-
     atualizarLista();
-
     console.log(pontos);
 }
 
 function atualizarLista(){
 
-    const lista =
-    document.getElementById(
-        "listaPontos"
-    );
-
+    const lista = document.getElementById("listaPontos");
     lista.innerHTML = "";
 
     pontos.forEach((ponto,index)=>{
-
         lista.innerHTML += `
-
         <div style="
         margin-top:10px;
         padding:10px;
         border-radius:10px;
         background:rgba(255,255,255,0.05);
         ">
-
-        P${index + 1}
-
-        <br>
-
-        X: ${ponto.x}
-
-        Y: ${ponto.y}
-
-        Z: ${ponto.z}
-
+        P${index + 1} <br>
+        X: ${ponto.x} | Y: ${ponto.y} | Z: ${ponto.z}
         </div>
         `;
     });
 }
+
+/* =====================================
+MOVIMENTO AUTOMÁTICO
+===================================== */
+
+let movendoBicoAutomatico = true; 
+let direcaoBico = 1; 
+
 function moverBico(){
+    const altura = Number(document.getElementById("altura").value);
+    bico.position.y = altura;
+    luzSolda.position.set(bico.position.x - 1.5, bico.position.y, bico.position.z);
+}
 
-    const altura =
-    Number(
-        document.getElementById(
-            "altura"
-        ).value
-    );
-
-
-
-    bico.position.y =
-    altura;
-
-    luzSolda.position.copy(
-        bico.position
-    );
+function alternarMovimento() {
+    movendoBicoAutomatico = !movendoBicoAutomatico;
+    const btn = document.getElementById("btnPlayPause");
+    btn.innerText = movendoBicoAutomatico ? "Pausar" : "Iniciar";
 }
 
 /* =====================================
@@ -758,50 +730,53 @@ GIRAR MESA
 let girando = false;
 
 function girarMesa(){
-
     girando = !girando;
-
-    document.getElementById(
-        "statusMesa"
-    ).innerText =
-
-    girando
-    ? "GIRANDO"
-    : "PARADA";
+    document.getElementById("statusMesa").innerText = girando ? "GIRANDO" : "PARADA";
 }
 
 /* =====================================
-ANIMAÇÃO
+ANIMAÇÃO (BUG DO BICO VOADOR CORRIGIDO 🛠️)
 ===================================== */
 
 function animate(){
 
-    requestAnimationFrame(
-        animate
-    );
-
+    requestAnimationFrame(animate);
     controls.update();
 
     if(girando){
-
         mesa.rotation.y += 0.02;
     }
 
-    luzSolda.intensity =
-    4 +
-    Math.sin(Date.now()*0.01);
+    if(movendoBicoAutomatico) {
+        bico.position.y += 0.04 * direcaoBico;
 
-    renderer.render(
-        scene,
-        camera
-    );
+        // Gira o carretel de arame
+        roloArame.rotation.y += 0.02; 
+
+        // CORREÇÃO DOS LIMITES: Bate no teto (6.2) desce, bateu perto da mesa (1.4) sobe
+        if(bico.position.y >= 6.2) {
+            direcaoBico = -1;
+        }
+        if(bico.position.y <= 1.4) {  // <-- Corrigido o sinal de "menor ou igual" aqui!
+            direcaoBico = 1;
+        }
+
+        // Atualiza a posição da luz de solda azul acompanhando o bico horizontal na lateral
+        luzSolda.position.set(bico.position.x - 1.5, bico.position.y, bico.position.z);
+        
+        document.getElementById("altura").value = bico.position.y;
+    }
+
+    luzSolda.intensity = 4 + Math.sin(Date.now()*0.01);
+
+    renderer.render(scene, camera);
 }
+
 /* =====================================
-SALVAR PROGRAMA
+SALVAR E CARREGAR PROGRAMA
 ===================================== */
 
 function salvarPrograma(){
-
     if(pontos.length === 0){
         alert("Nenhum ponto salvo!");
         return;
@@ -816,70 +791,36 @@ function salvarPrograma(){
         pontos: pontos
     };
 
-    // salva o programa
     localStorage.setItem(nome, JSON.stringify(programa));
-
-    // 🔥 define como programa atual
     localStorage.setItem("programaAtual", nome);
-
-    document.getElementById("statusPrograma").innerText =
-        `Programa "${nome}" salvo com sucesso!`;
-
-    console.log(programa);
+    document.getElementById("statusPrograma").innerText = `Programa "${nome}" salvo com sucesso!`;
 }
-/* =====================================
-CARREGAR PROGRAMA SALVO
-===================================== */
 
 function carregarPrograma(){
-
-    const nome =
-    localStorage.getItem("programaAtual");
-
+    const nome = localStorage.getItem("programaAtual");
     if(!nome) return;
 
-    const data =
-    localStorage.getItem(nome);
-
+    const data = localStorage.getItem(nome);
     if(!data) return;
 
-    const programa =
-    JSON.parse(data);
-
+    const programa = JSON.parse(data);
     pontos = programa.pontos || [];
-
     atualizarLista();
-
-    document.getElementById(
-        "statusPrograma"
-    ).innerText =
-    `Programa "${programa.nome}" carregado`;
+    document.getElementById("statusPrograma").innerText = `Programa "${programa.nome}" carregado`;
 }
 
 carregarPrograma();
-
 animate();
 
 /* =====================================
 RESPONSIVO
 ===================================== */
 
-window.addEventListener(
-    "resize",
-    () => {
-
-        camera.aspect =
-        window.innerWidth /
-        window.innerHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            window.innerWidth,
-            window.innerHeight
-        );
-    }
-);
+window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
 </script>
 
