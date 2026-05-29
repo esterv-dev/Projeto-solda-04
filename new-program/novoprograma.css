@@ -1,0 +1,322 @@
+body {
+  margin: 0;
+  background: #050816;
+  font-family: Arial;
+  overflow: hidden;
+}
+
+.login-container {
+  display: grid;
+
+  grid-template-columns: 320px 1fr;
+
+  height: 100vh;
+}
+
+/* ================= PAINEL ================= */
+
+.painel {
+  background: #0b1120;
+
+  padding: 30px;
+
+  border-right: 1px solid #1e293b;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+h2 {
+  color: white;
+  margin: 0;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  color: #60a5fa;
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  background: #111827;
+
+  border: none;
+
+  color: white;
+
+  padding: 14px;
+
+  border-radius: 12px;
+}
+
+/* ================= CONTROLE ================= */
+
+.controle-eixos {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.eixo {
+  flex: 1;
+
+  background: #111827;
+
+  border-radius: 20px;
+
+  padding: 15px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.eixo button {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 12px;
+
+  border: none;
+
+  background: #2563eb;
+
+  color: white;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+/* ================= POSIÇÃO ================= */
+
+.posicao-atual {
+  background: #111827;
+
+  padding: 15px;
+
+  border-radius: 15px;
+
+  color: #22c55e;
+}
+
+/* ================= BOTÃO ================= */
+.botoes-area{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+#btnSalvarPonto {
+  background: #006d36;
+
+  border: none;
+
+  padding: 15px;
+
+  border-radius: 15px;
+
+  color: white;
+
+  cursor: pointer;
+
+  font-size: 16px;
+}
+
+/* BOTÃO VOLTAR PEQUENO */
+
+.btn-voltar {
+  width: 50px;
+  height: 50px;
+
+  border-radius: 15px;
+
+  border: none;
+
+  background: #111827;
+
+  color: white;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+h3{
+    color: white;
+}
+#btnSalvar{
+      background: #eb2525;
+
+  border: none;
+
+  padding: 15px;
+
+  border-radius: 15px;
+
+  color: white;
+
+  cursor: pointer;
+
+  font-size: 16px;
+}
+
+ /* ================= ÁREA 3D ================= */
+
+.area3d {
+  position: relative;
+
+  height: 100vh;
+
+  background:
+  radial-gradient(circle at center,
+  #0f172a,
+  #020617);
+
+  overflow: hidden;
+}
+
+.topbar {
+  position: absolute;
+
+  top: 20px;
+  left: 20px;
+
+  z-index: 20;
+
+  color: white;
+
+  background: rgba(15, 23, 42, 0.7);
+
+  backdrop-filter: blur(10px);
+
+  padding: 15px 20px;
+
+  border-radius: 16px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.topbar h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.topbar p {
+  margin: 5px 0 0;
+  color: #94a3b8;
+}
+
+/* ================= SCENE ================= */
+
+#scene3d {
+  width: 100%;
+  height: 100%;
+}
+
+/* MUITO IMPORTANTE */
+#scene3d canvas {
+  width: 100% !important;
+  height: 100% !important;
+
+  display: block;
+
+  pointer-events: none;
+}
+
+/* ================= LISTA ================= */
+
+.lista-box {
+  flex: 1;
+
+  overflow-y: auto;
+
+  background: #111827;
+
+  border-radius: 20px;
+
+  padding: 15px;
+}
+
+#listaPontos {
+  list-style: none;
+
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+#listaPontos li {
+  background: #1e293b;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  color: white;
+
+  border-left: 4px solid #2563eb;
+
+  font-size: 14px;
+}
+
+/* ================= BOTÕES ================= */
+
+button {
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+
+  filter: brightness(1.1);
+}
+
+/* BOTÃO VOLTAR */
+
+.btn-voltar {
+  position: absolute;
+
+  bottom: 20px;
+  left: 20px;
+
+  width: 50px;
+  height: 50px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;
+
+  z-index: 20;
+}
+
+/* ================= SCROLL ================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+
+  border-radius: 20px;
+}

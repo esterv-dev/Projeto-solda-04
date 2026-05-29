@@ -1,0 +1,96 @@
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:#020617;
+
+    font-family:Arial;
+
+    color:white;
+
+    padding:30px;
+}
+
+h1{
+
+    margin-bottom:30px;
+
+    color:#38bdf8;
+}
+
+.lista{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+}
+
+.programa{
+
+    background:rgba(255,255,255,0.05);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    border-radius:15px;
+
+    padding:20px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.programa:hover{
+
+    transform:translateY(-3px);
+
+    background:rgba(255,255,255,0.08);
+}
+
+.nome{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    color:#4ade80;
+}
+
+.data{
+
+    margin-top:10px;
+
+    color:#94a3b8;
+}
+
+.pontos{
+
+    margin-top:10px;
+
+    color:#cbd5e1;
+}
+
+button{
+
+    margin-top:15px;
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#2563eb;
+
+    color:white;
+
+    cursor:pointer;
+}
+
